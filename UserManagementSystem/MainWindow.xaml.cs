@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Lab 5 by Johan Lång and Anders Eriksson, Göteborg 171020
+
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
