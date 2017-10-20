@@ -1,0 +1,30 @@
+﻿<Window x:Class="UserManagementSystem.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UserManagementSystem"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="261*"/>
+            <ColumnDefinition Width="257*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                <GradientStop Color="Black" Offset="1"/>
+                <GradientStop Color="#FF10D2F7"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <TextBox x:Name="TextBoxUserName" HorizontalAlignment="Left" Height="23" Margin="80,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBoxUserName_TextChanged"/>
+        <TextBox x:Name="TextBoxUserEmail" HorizontalAlignment="Left" Height="23" Margin="80,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBoxUserEmail_TextChanged"/>
+        <Label x:Name="LabelUserName" Content="User name:" HorizontalAlignment="Left" Margin="9,60,0,0" VerticalAlignment="Top" Height="23" Width="63" FontWeight="Bold" FontSize="10"/>
+        <Label x:Name="LabelUserEmail" Content="User email:" HorizontalAlignment="Left" Margin="10,95,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="10"/>
+        <Button x:Name="ButtonUserCreate" Content="Create User" HorizontalAlignment="Left" Margin="80,132,0,0" VerticalAlignment="Top" Width="75" FontSize="10" IsEnabled="False" FontWeight="Bold" ToolTip="Create a new user" Click="ButtonUserCreate_Click"/>
+        <ListBox x:Name="ListBoxUserList" HorizontalAlignment="Left" Height="100" Margin="241,60,0,0" VerticalAlignment="Top" Width="100" Grid.ColumnSpan="2" Loaded="ListBoxUserList_Loaded"/>
+        <Label x:Name="LabelUserList" Content="User List" HorizontalAlignment="Left" Margin="241,37,0,0" VerticalAlignment="Top" Width="50" FontWeight="Bold" FontSize="10" Height="23" Grid.ColumnSpan="2"/>
+        <Label x:Name="LabelUSM" Content="User Management System, UMS" HorizontalAlignment="Left" Margin="160,3,0,0" VerticalAlignment="Top" Width="229" FontWeight="Bold" FontSize="14" Grid.ColumnSpan="2"/>
+
+    </Grid>
+</Window>
