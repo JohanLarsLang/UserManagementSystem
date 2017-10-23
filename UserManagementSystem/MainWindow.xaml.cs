@@ -96,7 +96,11 @@ namespace UserManagementSystem
 
         private void ButtonDeleteUser_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = ListBoxUserList.Items.Count - 1; i >= 0; i--)
+            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Are you sure?", "Confirm delete", System.Windows.MessageBoxButton.YesNo);
+
+            if (messageBoxResult == MessageBoxResult.Yes)
+
+                for (int i = ListBoxUserList.Items.Count - 1; i >= 0; i--)
             {
                 object[] itemsToRemove = new object[ListBoxUserList.SelectedItems.Count];
                 ListBoxUserList.SelectedItems.CopyTo(itemsToRemove, 0);
@@ -118,6 +122,10 @@ namespace UserManagementSystem
                     ListBoxAdminList.Items.Remove(item);
                  }
             }
+
+            TextBoxUserName.Text = "";
+            TextBoxUserEmail.Text = "";
+            ButtonChangeUser.IsEnabled = false;
         }
 
         private void ListBoxAdminList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -179,13 +187,30 @@ namespace UserManagementSystem
         {
             if ((User)ListBoxUserList.SelectedItem != null || (User)ListBoxAdminList.SelectedItem == null)
             {
+
                 int nrMatchName = CheckName();
                 int nrMatchEmail = CheckEmail();
 
                 List<string> userNamneInUnserList = UserNameList(ListBoxUserList);
                 List<string> userNamneInAdminList = UserNameList(ListBoxAdminList);
 
-                if (userNamneInUnserList.Contains(TextBoxUserName.Text) || userNamneInAdminList.Contains(TextBoxUserName.Text))
+       
+                if (((User)ListBoxUserList.SelectedItem).Name == TextBoxUserName.Text)
+                {
+
+                    if (nrMatchEmail < 1)
+                        MessageBox.Show("This email is not correct!");
+
+                    else
+                    {
+                        ListBoxUserList.Items.Remove((User)ListBoxUserList.SelectedItem);
+                        User user = new User(TextBoxUserName.Text, TextBoxUserEmail.Text);
+                        ListBoxUserList.Items.Add(new User(TextBoxUserName.Text, TextBoxUserEmail.Text));
+                    }
+
+
+                }
+                else if (userNamneInUnserList.Contains(TextBoxUserName.Text) || userNamneInAdminList.Contains(TextBoxUserName.Text))
                     MessageBox.Show("This name already exists!");
 
                 else if (nrMatchName < 1)
@@ -211,7 +236,21 @@ namespace UserManagementSystem
                 List<string> userNamneInUnserList = UserNameList(ListBoxUserList);
                 List<string> userNamneInAdminList = UserNameList(ListBoxAdminList);
 
-                if (userNamneInUnserList.Contains(TextBoxUserName.Text) || userNamneInAdminList.Contains(TextBoxUserName.Text))
+                if (((User)ListBoxAdminList.SelectedItem).Name == TextBoxUserName.Text)
+                {
+
+                    if (nrMatchEmail < 1)
+                        MessageBox.Show("This email is not correct!");
+
+                    else
+                    {
+                        ListBoxAdminList.Items.Remove((User)ListBoxAdminList.SelectedItem);
+                        User user = new User(TextBoxUserName.Text, TextBoxUserEmail.Text);
+                        ListBoxAdminList.Items.Add(new User(TextBoxUserName.Text, TextBoxUserEmail.Text));
+                    }
+                }
+
+                else if (userNamneInUnserList.Contains(TextBoxUserName.Text) || userNamneInAdminList.Contains(TextBoxUserName.Text))
                     MessageBox.Show("This name already exists!");
 
                 else if (nrMatchName < 1)
@@ -323,7 +362,7 @@ namespace UserManagementSystem
         private void SortDesending()
         {
 
-            List<object> userNameInUnserList = UserNameListObject(ListBoxUserList);
+            List<string> userNameInUnserList = UserNameList(ListBoxUserList);
 
                     var querySortUserList = from user in userNameInUnserList
                                             orderby user descending
@@ -332,7 +371,8 @@ namespace UserManagementSystem
                 foreach(object x in querySortUserList)
                     ListBoxUserList.Items.Add(x);
             }
-                
-        }
+
+    
+    }
     }
 
