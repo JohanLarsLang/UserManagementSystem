@@ -10,9 +10,6 @@ namespace UserManagementSystem
     {
         public string Name { get; set; }
         public string Email { get; set; }
-        //private string Name;
-        //private string Email;
-
         public bool Admin { get; set; }
 
         public User(string name, string email)
