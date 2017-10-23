@@ -1,4 +1,4 @@
-﻿//Lab 5 by Johan Lång and Anders Eriksson, Göteborg 171020
+﻿//Lab 5 by Johan Lång and Anders Eriksson, Göteborg 171024
 
 using System;
 using System.IO;
@@ -27,24 +27,12 @@ namespace UserManagementSystem
         public MainWindow()
         {
             InitializeComponent();
-
-            /*
-            const int snugContentWidth = 800;
-            const int snugContentHeight = 400;
-
-            var horizontalBorderHeight = SystemParameters.ResizeFrameHorizontalBorderHeight;
-            var verticalBorderWidth = SystemParameters.ResizeFrameVerticalBorderWidth;
-            var captionHeight = SystemParameters.CaptionHeight;
-
-            Width = snugContentWidth + 2 * verticalBorderWidth;
-            Height = snugContentHeight + captionHeight + 2 * horizontalBorderHeight;
-            */
-
-        }
+       }
 
         private void TextBoxUserName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            CheckNameAndEmail();
+            EnableTextBoxes();
+
             if ((User)ListBoxUserList.SelectedItem != null || (User)ListBoxAdminList.SelectedItem != null)
             {
                 ButtonChangeUser.IsEnabled = true;
@@ -53,11 +41,16 @@ namespace UserManagementSystem
 
         private void TextBoxUserEmail_TextChanged(object sender, TextChangedEventArgs e)
         {
-            CheckNameAndEmail();
+            EnableTextBoxes();
+
+            if ((User)ListBoxUserList.SelectedItem != null || (User)ListBoxAdminList.SelectedItem != null)
+            {
+                ButtonChangeUser.IsEnabled = true;
+            }
 
         }
 
-        public void CheckNameAndEmail()
+        private void EnableTextBoxes()
         {
             ButtonUserCreate.IsEnabled = TextBoxUserName.Text.Length != 0 && TextBoxUserName.Text.Trim().Length != 0 && TextBoxUserEmail.Text.Length != 0 && TextBoxUserEmail.Text.Trim().Length != 0;
 
@@ -71,27 +64,10 @@ namespace UserManagementSystem
             LabelUserInfo.Content = "";
         }
 
-        List<User> userlist = new List<User>();
-
+         
         private void ButtonUserCreate_Click(object sender, RoutedEventArgs e)
         {
-
             CreateUser();
-
-        }
-
-        private void ListBoxUserList_Loaded(object sender, RoutedEventArgs e)
-        {
-            /*
-            string[] lines = System.IO.File.ReadAllLines("UserList.txt");
-            int size = lines.Length;
-
-            for (int i = 0; i < size; i++)
-            {
-                ListBoxUserList.Items.Add(lines[i]);
-
-            }
-            */
         }
 
         private void ListBoxUserList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -106,7 +82,6 @@ namespace UserManagementSystem
                 TextBoxUserEmail.Text = ((User)ListBoxUserList.SelectedItem).Email;
                 ButtonMoveToAdmin.IsEnabled = true;
                 ButtonMoveToUser.IsEnabled = false;
-
             }
 
             else
@@ -117,9 +92,6 @@ namespace UserManagementSystem
                 ButtonChangeUser.IsEnabled = true;
                 ButtonDeleteUser.IsEnabled = true;
             }
-
-
-            //LabelUserInfo.Content = ListBoxUserList.SelectedItem;
         }
 
         private void ButtonDeleteUser_Click(object sender, RoutedEventArgs e)
@@ -132,13 +104,7 @@ namespace UserManagementSystem
                 foreach (object item in itemsToRemove)
                 {
                     ListBoxUserList.Items.Remove(item);
-                    /*
-                    string[] lines = System.IO.File.ReadAllLines("UserList.txt");
-                    int size = lines.Length;
-
-                    File.WriteAllLines("UserList.txt",
-                    File.ReadLines("UserList.txt").Where(l => l != (string)item).ToList());
-                    */
+       
                 }
             }
 
@@ -150,14 +116,7 @@ namespace UserManagementSystem
                 foreach (object item in itemsToRemove)
                 {
                     ListBoxAdminList.Items.Remove(item);
-                    /*
-                    string[] lines = System.IO.File.ReadAllLines("UserList.txt");
-                    int size = lines.Length;
-
-                    File.WriteAllLines("UserList.txt",
-                    File.ReadLines("UserList.txt").Where(l => l != (string)item).ToList());
-                    */
-                }
+                 }
             }
         }
 
@@ -183,25 +142,9 @@ namespace UserManagementSystem
                 ButtonDeleteUser.IsEnabled = true;
                 ButtonMoveToUser.IsEnabled = true;
             }
-
-
-
         }
 
-        private void ListBoxAdminList_Loaded(object sender, RoutedEventArgs e)
-        {
-            /*
-            string[] lines = System.IO.File.ReadAllLines("UserList.txt");
-            int size = lines.Length;
-
-            for (int i = 0; i < size; i++)
-            {
-                ListBoxAdminList.Items.Add(lines[i]);
-
-            }
-            */
-        }
-
+  
         private void ButtonMoveToAdmin_Click(object sender, RoutedEventArgs e)
         {
             for (int i = ListBoxUserList.Items.Count - 1; i >= 0; i--)
@@ -215,7 +158,6 @@ namespace UserManagementSystem
                     ListBoxUserList.Items.Remove(item);
                 }
             }
-
         }
 
         private void ButtonMoveToUser_Click(object sender, RoutedEventArgs e)
@@ -228,8 +170,7 @@ namespace UserManagementSystem
                 foreach (object item in itemsToRemove)
                 {
                     ListBoxUserList.Items.Add(item);
-
-
+                    ListBoxAdminList.Items.Remove(item);
                 }
             }
         }
@@ -238,65 +179,160 @@ namespace UserManagementSystem
         {
             if ((User)ListBoxUserList.SelectedItem != null || (User)ListBoxAdminList.SelectedItem == null)
             {
-                ListBoxAdminList.Items.Remove((User)ListBoxUserList.SelectedItem);
-                CreateUser();
+                int nrMatchName = CheckName();
+                int nrMatchEmail = CheckEmail();
+
+                List<string> userNamneInUnserList = UserNameList(ListBoxUserList);
+                List<string> userNamneInAdminList = UserNameList(ListBoxAdminList);
+
+                if (userNamneInUnserList.Contains(TextBoxUserName.Text) || userNamneInAdminList.Contains(TextBoxUserName.Text))
+                    MessageBox.Show("This name already exists!");
+
+                else if (nrMatchName < 1)
+                    MessageBox.Show("This name is not correct!");
+
+                else if (nrMatchEmail < 1)
+                    MessageBox.Show("This email is not correct!");
+
+                else
+                {
+                    ListBoxUserList.Items.Remove((User)ListBoxUserList.SelectedItem);
+                    User user = new User(TextBoxUserName.Text, TextBoxUserEmail.Text);
+                    ListBoxUserList.Items.Add(new User(TextBoxUserName.Text, TextBoxUserEmail.Text));
+                }
+
             }
+
+            else if ((User)ListBoxUserList.SelectedItem == null || (User)ListBoxAdminList.SelectedItem != null)
+            {
+                int nrMatchName = CheckName();
+                int nrMatchEmail = CheckEmail();
+
+                List<string> userNamneInUnserList = UserNameList(ListBoxUserList);
+                List<string> userNamneInAdminList = UserNameList(ListBoxAdminList);
+
+                if (userNamneInUnserList.Contains(TextBoxUserName.Text) || userNamneInAdminList.Contains(TextBoxUserName.Text))
+                    MessageBox.Show("This name already exists!");
+
+                else if (nrMatchName < 1)
+                    MessageBox.Show("This name is not correct!");
+
+                else if (nrMatchEmail < 1)
+                    MessageBox.Show("This email is not correct!");
+
+                else
+                {
+                    ListBoxAdminList.Items.Remove((User)ListBoxAdminList.SelectedItem);
+                    User user = new User(TextBoxUserName.Text, TextBoxUserEmail.Text);
+                    ListBoxAdminList.Items.Add(new User(TextBoxUserName.Text, TextBoxUserEmail.Text));
+                }
+
+            }
+
+            TextBoxUserName.Text = "";
+            TextBoxUserEmail.Text = "";
+            CheckBoxAdmin.IsChecked = false;
         }
 
-        public void CreateUser()
+        private int CheckName()
         {
             string haystackName = (string)TextBoxUserName.Text;
-            string patternName = @"\A[A-Z]\w{2,}";
+            string patternName = @"\A[A-Z]\w{1,}";
 
             var matchesName = Regex.Matches(haystackName, patternName);
             int nrMatchName = matchesName.Count;
+            return nrMatchName;
+        }
 
+
+
+        private int CheckEmail()
+        {
             string haystackEmail = (string)TextBoxUserEmail.Text;
             string patternEmail = @"\A[\w|\D]+[@][\w|\D]+[.][\w|\D]+";
 
             var matchesEmail = Regex.Matches(haystackEmail, patternEmail);
             int nrMatchEmail = matchesEmail.Count;
 
+            return nrMatchEmail;
+        }
 
-            //((User)ListBoxAdminList.SelectedItem).Name;
-            if (ListBoxUserList.Items.Contains(TextBoxUserName.Text))
+        private void CreateUser()
+        {
+            int nrMatchName = CheckName();
+            int nrMatchEmail = CheckEmail();
 
-            //if ((User)(ListBoxUserList.Items.Contains)(TextBoxUserName.Text))
-            //|| ListBoxAdminList.Items.Contains((string)TextBoxUserName.Text))
+            List<string> userNamneInUnserList = UserNameList(ListBoxUserList);
+            List<string> userNamneInAdminList = UserNameList(ListBoxAdminList);
+
+            if (userNamneInUnserList.Contains(TextBoxUserName.Text) || userNamneInAdminList.Contains(TextBoxUserName.Text))
             {
-                //Message.Content = "This name already exists!";
                 MessageBox.Show("This name already exists!");
                 TextBoxUserName.Text = "";
                 TextBoxUserEmail.Text = "";
                 CheckBoxAdmin.IsChecked = false;
             }
 
-            /*
-                        else if (nrMatchName < 1)
-                            MessageBox.Show("This name is not correct!");
+            else if (nrMatchName < 1)
+                MessageBox.Show("This name is not correct!");
 
-                        else if (nrMatchEmail < 1)
-                            MessageBox.Show("This email is not correct!");
-            */
+            else if (nrMatchEmail < 1)
+                MessageBox.Show("This email is not correct!");
 
             else
             {
-                User user = new User(TextBoxUserName.Text, TextBoxUserEmail.Text);
 
-                //string[] lines = { TextBoxUserName.Text, TextBoxUserEmail.Text };
+                User user = new User(TextBoxUserName.Text, TextBoxUserEmail.Text);
 
                 if (CheckBoxAdmin.IsChecked == false)
                     ListBoxUserList.Items.Add(new User(TextBoxUserName.Text, TextBoxUserEmail.Text));
-                //ListBoxUserList.Items.Add(user.GetName());
+
                 else
                     ListBoxAdminList.Items.Add(new User(TextBoxUserName.Text, TextBoxUserEmail.Text));
 
-                // File.AppendAllLines("UserList.txt", lines);
                 TextBoxUserName.Text = "";
                 TextBoxUserEmail.Text = "";
                 CheckBoxAdmin.IsChecked = false;
             }
+        }
 
+        private List<string> UserNameList(ListBox lb)
+        {
+
+            List<string> objectName = new List<string>();
+            for (int i = 0; i < lb.Items.Count; i++)
+            {
+                objectName.Add(((User)lb.Items.GetItemAt(i)).Name);
+            }
+
+            return objectName;
+        }
+
+        private List<object> UserNameListObject(ListBox lb)
+        {
+
+            List<object> objectName = new List<object>();
+            for (int i = 0; i < lb.Items.Count; i++)
+            {
+                objectName.Add(((User)lb.Items.GetItemAt(i)));
+            }
+
+            return objectName;
+        }
+
+        private void SortDesending()
+        {
+
+            List<object> userNameInUnserList = UserNameListObject(ListBoxUserList);
+
+                    var querySortUserList = from user in userNameInUnserList
+                                            orderby user descending
+                                        select user;
+
+                foreach(object x in querySortUserList)
+                    ListBoxUserList.Items.Add(x);
+            }
+                
         }
     }
-}
+
