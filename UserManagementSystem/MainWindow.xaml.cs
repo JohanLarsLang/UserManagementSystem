@@ -45,6 +45,10 @@ namespace UserManagementSystem
         private void TextBoxUserName_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckNameAndEmail();
+            if ((User)ListBoxUserList.SelectedItem != null || (User)ListBoxAdminList.SelectedItem != null)
+            {
+                ButtonChangeUser.IsEnabled = true;
+            }
         }
 
         private void TextBoxUserEmail_TextChanged(object sender, TextChangedEventArgs e)
@@ -72,59 +76,8 @@ namespace UserManagementSystem
         private void ButtonUserCreate_Click(object sender, RoutedEventArgs e)
         {
 
-           // CreateUser(sender, e);
+            CreateUser();
 
-           
-            string haystackName = (string)TextBoxUserName.Text;
-            string patternName = @"\A[A-Z]\w{2,}";
-
-            var matchesName = Regex.Matches(haystackName, patternName);
-            int nrMatchName = matchesName.Count;
-
-            string haystackEmail = (string)TextBoxUserEmail.Text;
-            string patternEmail = @"\A[\w|\D]+[@][\w|\D]+[.][\w|\D]+";
-
-            var matchesEmail = Regex.Matches(haystackEmail, patternEmail);
-            int nrMatchEmail = matchesEmail.Count;
-
-
-
-
-            if (ListBoxUserList.Items.Contains(TextBoxUserName.Text) || ListBoxAdminList.Items.Contains(TextBoxUserName.Text))
-            {
-                //Message.Content = "This name already exists!";
-                MessageBox.Show("This name already exists!");
-                TextBoxUserName.Text = "";
-                TextBoxUserEmail.Text = "";
-                CheckBoxAdmin.IsChecked = false;
-            }
-           
-/*
-            else if (nrMatchName < 1)
-                MessageBox.Show("This name is not correct!");
-
-            else if (nrMatchEmail < 1)
-                MessageBox.Show("This email is not correct!");
-*/
-
-            else
-            {
-                User user = new User(TextBoxUserName.Text, TextBoxUserEmail.Text);
-
-                //string[] lines = { TextBoxUserName.Text, TextBoxUserEmail.Text };
-
-                if (CheckBoxAdmin.IsChecked == false)
-                    ListBoxUserList.Items.Add(new User(TextBoxUserName.Text, TextBoxUserEmail.Text));
-                //ListBoxUserList.Items.Add(user.GetName());
-                else
-                    ListBoxAdminList.Items.Add(new User(TextBoxUserName.Text, TextBoxUserEmail.Text));
-
-               // File.AppendAllLines("UserList.txt", lines);
-                TextBoxUserName.Text = "";
-                TextBoxUserEmail.Text = "";
-                CheckBoxAdmin.IsChecked = false;
-            }
-           
         }
 
         private void ListBoxUserList_Loaded(object sender, RoutedEventArgs e)
@@ -144,26 +97,27 @@ namespace UserManagementSystem
         private void ListBoxUserList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
-           if ((User)ListBoxUserList.SelectedItem != null)
+            if ((User)ListBoxUserList.SelectedItem != null)
             {
                 LabelUserInfo.Content = "Name: " + ((User)ListBoxUserList.SelectedItem).Name + "\n" + "Email: " +
                                         ((User)ListBoxUserList.SelectedItem).Email;
 
-               // if ((User)ListBoxAdminList.SelectedItem == null)
-                //{
-                    TextBoxUserName.Text = (string)((User)ListBoxUserList.SelectedItem).Name;
-                    TextBoxUserEmail.Text = (string)((User)ListBoxUserList.SelectedItem).Email;
-               // }
-           }
+                TextBoxUserName.Text = ((User)ListBoxUserList.SelectedItem).Name;
+                TextBoxUserEmail.Text = ((User)ListBoxUserList.SelectedItem).Email;
+                ButtonMoveToAdmin.IsEnabled = true;
+                ButtonMoveToUser.IsEnabled = false;
 
-          else
-             LabelUserInfo.Content = string.Empty;
-           
+            }
 
-            ButtonChangeUser.IsEnabled = true;
-            ButtonDeleteUser.IsEnabled = true;
-            ButtonMoveToAdmin.IsEnabled = true;
-            ButtonMoveToUser.IsEnabled = false;
+            else
+                LabelUserInfo.Content = string.Empty;
+
+            if ((User)ListBoxUserList.SelectedItem != null || (User)ListBoxAdminList.SelectedItem != null)
+            {
+                ButtonChangeUser.IsEnabled = true;
+                ButtonDeleteUser.IsEnabled = true;
+            }
+
 
             //LabelUserInfo.Content = ListBoxUserList.SelectedItem;
         }
@@ -214,19 +168,24 @@ namespace UserManagementSystem
                 LabelUserInfo.Content = "Name: " + ((User)ListBoxAdminList.SelectedItem).Name + "\n" + "Email: " +
                                         ((User)ListBoxAdminList.SelectedItem).Email;
 
-                TextBoxUserName.Text = (string)((User)ListBoxAdminList.SelectedItem).Name;
-                TextBoxUserEmail.Text = (string)((User)ListBoxAdminList.SelectedItem).Email;
+                TextBoxUserName.Text = ((User)ListBoxAdminList.SelectedItem).Name;
+                TextBoxUserEmail.Text = ((User)ListBoxAdminList.SelectedItem).Email;
+
+                ButtonMoveToAdmin.IsEnabled = false;
+                ButtonMoveToUser.IsEnabled = true;
             }
             else
-             LabelUserInfo.Content = string.Empty;
-            
-            ButtonChangeUser.IsEnabled = true;
-            ButtonDeleteUser.IsEnabled = true;
-            ButtonMoveToUser.IsEnabled = true;
-            ButtonMoveToAdmin.IsEnabled = false;
-            ButtonMoveToUser.IsEnabled = true;
+                LabelUserInfo.Content = string.Empty;
 
-            
+            if ((User)ListBoxUserList.SelectedItem != null || (User)ListBoxAdminList.SelectedItem != null)
+            {
+                ButtonChangeUser.IsEnabled = true;
+                ButtonDeleteUser.IsEnabled = true;
+                ButtonMoveToUser.IsEnabled = true;
+            }
+
+
+
         }
 
         private void ListBoxAdminList_Loaded(object sender, RoutedEventArgs e)
@@ -254,7 +213,7 @@ namespace UserManagementSystem
                 {
                     ListBoxAdminList.Items.Add(item);
                     ListBoxUserList.Items.Remove(item);
-               }
+                }
             }
 
         }
@@ -269,13 +228,22 @@ namespace UserManagementSystem
                 foreach (object item in itemsToRemove)
                 {
                     ListBoxUserList.Items.Add(item);
-                    ListBoxAdminList.Items.Remove(item);
-                    
+
+
                 }
             }
         }
 
-        private void ButtonChangeUser_Click()
+        private void ButtonChangeUser_Click(object sender, RoutedEventArgs e)
+        {
+            if ((User)ListBoxUserList.SelectedItem != null || (User)ListBoxAdminList.SelectedItem == null)
+            {
+                ListBoxAdminList.Items.Remove((User)ListBoxUserList.SelectedItem);
+                CreateUser();
+            }
+        }
+
+        public void CreateUser()
         {
             string haystackName = (string)TextBoxUserName.Text;
             string patternName = @"\A[A-Z]\w{2,}";
@@ -290,9 +258,11 @@ namespace UserManagementSystem
             int nrMatchEmail = matchesEmail.Count;
 
 
+            //((User)ListBoxAdminList.SelectedItem).Name;
+            if (ListBoxUserList.Items.Contains(TextBoxUserName.Text))
 
-
-            if (ListBoxUserList.Items.Contains(TextBoxUserName.Text) || ListBoxAdminList.Items.Contains(TextBoxUserName.Text))
+            //if ((User)(ListBoxUserList.Items.Contains)(TextBoxUserName.Text))
+            //|| ListBoxAdminList.Items.Contains((string)TextBoxUserName.Text))
             {
                 //Message.Content = "This name already exists!";
                 MessageBox.Show("This name already exists!");
@@ -300,6 +270,7 @@ namespace UserManagementSystem
                 TextBoxUserEmail.Text = "";
                 CheckBoxAdmin.IsChecked = false;
             }
+
             /*
                         else if (nrMatchName < 1)
                             MessageBox.Show("This name is not correct!");
@@ -307,6 +278,7 @@ namespace UserManagementSystem
                         else if (nrMatchEmail < 1)
                             MessageBox.Show("This email is not correct!");
             */
+
             else
             {
                 User user = new User(TextBoxUserName.Text, TextBoxUserEmail.Text);
@@ -326,6 +298,5 @@ namespace UserManagementSystem
             }
 
         }
-
-         }
+    }
 }
