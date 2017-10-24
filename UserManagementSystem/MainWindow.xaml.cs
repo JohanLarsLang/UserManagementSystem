@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
+using System.ComponentModel;
 
 namespace UserManagementSystem
 {
@@ -27,7 +28,7 @@ namespace UserManagementSystem
         public MainWindow()
         {
             InitializeComponent();
-       }
+        }
 
         private void TextBoxUserName_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -35,7 +36,7 @@ namespace UserManagementSystem
 
             if ((User)ListBoxUserList.SelectedItem != null || (User)ListBoxAdminList.SelectedItem != null)
             {
-               ButtonChangeUser.IsEnabled = true;
+                ButtonChangeUser.IsEnabled = true;
             }
         }
 
@@ -45,7 +46,7 @@ namespace UserManagementSystem
 
             if ((User)ListBoxUserList.SelectedItem != null || (User)ListBoxAdminList.SelectedItem != null)
             {
-               ButtonChangeUser.IsEnabled = true;
+                ButtonChangeUser.IsEnabled = true;
             }
 
         }
@@ -64,7 +65,7 @@ namespace UserManagementSystem
             LabelUserInfo.Content = "";
         }
 
-         
+
         private void ButtonUserCreate_Click(object sender, RoutedEventArgs e)
         {
             CreateUser();
@@ -82,6 +83,7 @@ namespace UserManagementSystem
                 TextBoxUserEmail.Text = ((User)ListBoxUserList.SelectedItem).Email;
                 ButtonMoveToAdmin.IsEnabled = true;
                 ButtonMoveToUser.IsEnabled = false;
+                CheckBoxAdminUserInfo.IsChecked = false;
             }
 
             else
@@ -101,16 +103,16 @@ namespace UserManagementSystem
             if (messageBoxResult == MessageBoxResult.Yes)
 
                 for (int i = ListBoxUserList.Items.Count - 1; i >= 0; i--)
-            {
-                object[] itemsToRemove = new object[ListBoxUserList.SelectedItems.Count];
-                ListBoxUserList.SelectedItems.CopyTo(itemsToRemove, 0);
-
-                foreach (object item in itemsToRemove)
                 {
-                    ListBoxUserList.Items.Remove(item);
-       
+                    object[] itemsToRemove = new object[ListBoxUserList.SelectedItems.Count];
+                    ListBoxUserList.SelectedItems.CopyTo(itemsToRemove, 0);
+
+                    foreach (object item in itemsToRemove)
+                    {
+                        ListBoxUserList.Items.Remove(item);
+
+                    }
                 }
-            }
 
             for (int i = ListBoxAdminList.Items.Count - 1; i >= 0; i--)
             {
@@ -120,7 +122,7 @@ namespace UserManagementSystem
                 foreach (object item in itemsToRemove)
                 {
                     ListBoxAdminList.Items.Remove(item);
-                 }
+                }
             }
 
             TextBoxUserName.Text = "";
@@ -140,6 +142,7 @@ namespace UserManagementSystem
 
                 ButtonMoveToAdmin.IsEnabled = false;
                 ButtonMoveToUser.IsEnabled = true;
+                CheckBoxAdminUserInfo.IsChecked = true;
             }
             else
                 LabelUserInfo.Content = string.Empty;
@@ -152,7 +155,7 @@ namespace UserManagementSystem
             }
         }
 
-  
+
         private void ButtonMoveToAdmin_Click(object sender, RoutedEventArgs e)
         {
             for (int i = ListBoxUserList.Items.Count - 1; i >= 0; i--)
@@ -181,6 +184,7 @@ namespace UserManagementSystem
                     ListBoxAdminList.Items.Remove(item);
                 }
             }
+            CheckBoxAdminUserInfo.IsChecked = false;
         }
 
         private void ButtonChangeUser_Click(object sender, RoutedEventArgs e)
@@ -191,10 +195,10 @@ namespace UserManagementSystem
                 int nrMatchName = CheckName();
                 int nrMatchEmail = CheckEmail();
 
-                List<string> userNamneInUnserList = UserNameList(ListBoxUserList);
-                List<string> userNamneInAdminList = UserNameList(ListBoxAdminList);
+                List<string> userNamneEmailInUnserList = UserNameEmailList(ListBoxUserList);
+                List<string> userNamneEmailInAdminList = UserNameEmailList(ListBoxAdminList);
 
-       
+
                 if (((User)ListBoxUserList.SelectedItem).Name == TextBoxUserName.Text)
                 {
 
@@ -210,8 +214,8 @@ namespace UserManagementSystem
 
 
                 }
-                else if (userNamneInUnserList.Contains(TextBoxUserName.Text) || userNamneInAdminList.Contains(TextBoxUserName.Text))
-                    MessageBox.Show("This name already exists!");
+                else if (userNamneEmailInUnserList.Contains(TextBoxUserEmail.Text) || userNamneEmailInAdminList.Contains(TextBoxUserEmail.Text))
+                    MessageBox.Show("This email already exists!");
 
                 else if (nrMatchName < 1)
                     MessageBox.Show("This name is not correct!");
@@ -233,8 +237,8 @@ namespace UserManagementSystem
                 int nrMatchName = CheckName();
                 int nrMatchEmail = CheckEmail();
 
-                List<string> userNamneInUnserList = UserNameList(ListBoxUserList);
-                List<string> userNamneInAdminList = UserNameList(ListBoxAdminList);
+                List<string> userNameEmailInUnserList = UserNameEmailList(ListBoxUserList);
+                List<string> userNameEmailInAdminList = UserNameEmailList(ListBoxAdminList);
 
                 if (((User)ListBoxAdminList.SelectedItem).Name == TextBoxUserName.Text)
                 {
@@ -250,8 +254,8 @@ namespace UserManagementSystem
                     }
                 }
 
-                else if (userNamneInUnserList.Contains(TextBoxUserName.Text) || userNamneInAdminList.Contains(TextBoxUserName.Text))
-                    MessageBox.Show("This name already exists!");
+                else if (userNameEmailInUnserList.Contains(TextBoxUserEmail.Text) || userNameEmailInAdminList.Contains(TextBoxUserEmail.Text))
+                    MessageBox.Show("This email already exists!");
 
                 else if (nrMatchName < 1)
                     MessageBox.Show("This name is not correct!");
@@ -271,13 +275,13 @@ namespace UserManagementSystem
             TextBoxUserName.Text = "";
             TextBoxUserEmail.Text = "";
             CheckBoxAdmin.IsChecked = false;
-            
+
         }
 
         private int CheckName()
         {
             string haystackName = (string)TextBoxUserName.Text;
-            string patternName = @"\A[A-Z]\w{1,}";
+            string patternName = @"\A[A-Z|[ÅÄÖ]\w{1,}";
 
             var matchesName = Regex.Matches(haystackName, patternName);
             int nrMatchName = matchesName.Count;
@@ -289,7 +293,7 @@ namespace UserManagementSystem
         private int CheckEmail()
         {
             string haystackEmail = (string)TextBoxUserEmail.Text;
-            string patternEmail = @"\A[\w]+[@][\w]+[.][\w]+";
+            string patternEmail = @"\A[\w|\D]+[@]\w+[.]\w+";
 
             var matchesEmail = Regex.Matches(haystackEmail, patternEmail);
             int nrMatchEmail = matchesEmail.Count;
@@ -302,12 +306,12 @@ namespace UserManagementSystem
             int nrMatchName = CheckName();
             int nrMatchEmail = CheckEmail();
 
-            List<string> userNamneInUnserList = UserNameList(ListBoxUserList);
-            List<string> userNamneInAdminList = UserNameList(ListBoxAdminList);
+            List<string> userNameEmailInUnserList = UserNameEmailList(ListBoxUserList);
+            List<string> userNameEmailInAdminList = UserNameEmailList(ListBoxAdminList);
 
-            if (userNamneInUnserList.Contains(TextBoxUserName.Text) || userNamneInAdminList.Contains(TextBoxUserName.Text))
+            if (userNameEmailInUnserList.Contains(TextBoxUserEmail.Text) || userNameEmailInAdminList.Contains(TextBoxUserEmail.Text))
             {
-                MessageBox.Show("This name already exists!");
+                MessageBox.Show("This email already exists!");
                 TextBoxUserName.Text = "";
                 TextBoxUserEmail.Text = "";
                 CheckBoxAdmin.IsChecked = false;
@@ -326,6 +330,7 @@ namespace UserManagementSystem
 
                 if (CheckBoxAdmin.IsChecked == false)
                     ListBoxUserList.Items.Add(new User(TextBoxUserName.Text, TextBoxUserEmail.Text));
+                //, ListSortDirection.Ascending);
 
                 else
                     ListBoxAdminList.Items.Add(new User(TextBoxUserName.Text, TextBoxUserEmail.Text));
@@ -336,44 +341,18 @@ namespace UserManagementSystem
             }
         }
 
-        private List<string> UserNameList(ListBox lb)
+        private List<string> UserNameEmailList(ListBox lb)
         {
 
             List<string> objectName = new List<string>();
             for (int i = 0; i < lb.Items.Count; i++)
             {
-                objectName.Add(((User)lb.Items.GetItemAt(i)).Name);
+                objectName.Add(((User)lb.Items.GetItemAt(i)).Email);
             }
 
             return objectName;
         }
-
-        private List<object> UserNameListObject(ListBox lb)
-        {
-
-            List<object> objectName = new List<object>();
-            for (int i = 0; i < lb.Items.Count; i++)
-            {
-                objectName.Add(((User)lb.Items.GetItemAt(i)));
-            }
-
-            return objectName;
-        }
-
-        private void SortDesending()
-        {
-
-            List<string> userNameInUnserList = UserNameList(ListBoxUserList);
-
-                    var querySortUserList = from user in userNameInUnserList
-                                            orderby user descending
-                                        select user;
-
-                foreach(object x in querySortUserList)
-                    ListBoxUserList.Items.Add(x);
-            }
-
-    
+                     
     }
-    }
+}
 
