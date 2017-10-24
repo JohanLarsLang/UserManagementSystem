@@ -10,8 +10,7 @@ namespace UserManagementSystem
     {
         public string Name { get; set; }
         public string Email { get; set; }
-        public bool Admin { get; set; }
-
+ 
         public User(string name, string email)
         {
             Name = name;
@@ -28,9 +27,5 @@ namespace UserManagementSystem
             return Email;
         }
 
-        public bool GetAdmin()
-        {
-            return Admin;
-        }
-    }
+     }
 }
