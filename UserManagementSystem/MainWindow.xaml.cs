@@ -35,7 +35,7 @@ namespace UserManagementSystem
 
             if ((User)ListBoxUserList.SelectedItem != null || (User)ListBoxAdminList.SelectedItem != null)
             {
-                ButtonChangeUser.IsEnabled = true;
+               ButtonChangeUser.IsEnabled = true;
             }
         }
 
@@ -45,7 +45,7 @@ namespace UserManagementSystem
 
             if ((User)ListBoxUserList.SelectedItem != null || (User)ListBoxAdminList.SelectedItem != null)
             {
-                ButtonChangeUser.IsEnabled = true;
+               ButtonChangeUser.IsEnabled = true;
             }
 
         }
@@ -271,6 +271,7 @@ namespace UserManagementSystem
             TextBoxUserName.Text = "";
             TextBoxUserEmail.Text = "";
             CheckBoxAdmin.IsChecked = false;
+            
         }
 
         private int CheckName()
@@ -288,7 +289,7 @@ namespace UserManagementSystem
         private int CheckEmail()
         {
             string haystackEmail = (string)TextBoxUserEmail.Text;
-            string patternEmail = @"\A[\w|\D]+[@][\w|\D]+[.][\w|\D]+";
+            string patternEmail = @"\A[\w]+[@][\w]+[.][\w]+";
 
             var matchesEmail = Regex.Matches(haystackEmail, patternEmail);
             int nrMatchEmail = matchesEmail.Count;

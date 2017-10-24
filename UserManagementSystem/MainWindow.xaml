@@ -29,9 +29,9 @@
         <ListBox x:Name="ListBoxUserList" HorizontalAlignment="Left" Height="145" Margin="227,80,0,0" VerticalAlignment="Top" Width="130" SelectionChanged="ListBoxUserList_SelectionChanged" ToolTip="Use Ctrl and Shift for multi selection" ItemsSource="{Binding Path=Commands}" DisplayMemberPath="Name" SelectionMode="Extended" Grid.ColumnSpan="2"/>
         <Label x:Name="LabelUserList" Content="User List" HorizontalAlignment="Left" Margin="225,58,0,0" VerticalAlignment="Top" Width="71" FontWeight="Bold" Height="29"/>
         <Label x:Name="LabelUSM" Content="User Management System, UMS" HorizontalAlignment="Left" Margin="157,15,0,0" VerticalAlignment="Top" Width="305" FontWeight="Bold" FontSize="18" Grid.ColumnSpan="2" FontFamily="Sitka Text"/>
-        <Label x:Name="LabelUserInfo" Content="" HorizontalAlignment="Left" Margin="227,259,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="322" Height="40" Background="White" ToolTip="" Focusable="True" Grid.ColumnSpan="2" FontWeight="Bold"/>
+        <Label x:Name="LabelUserInfo" Content="" HorizontalAlignment="Left" Margin="227,249,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="322" Height="40" Background="White" ToolTip="" Focusable="True" Grid.ColumnSpan="2" FontWeight="Bold"/>
         <ListBox x:Name="ListBoxAdminList" Grid.Column="1" HorizontalAlignment="Left" Height="145" Margin="124,80,0,0" VerticalAlignment="Top" Width="130" SelectionChanged="ListBoxAdminList_SelectionChanged" ToolTip="Use Ctrl and Shift for multi selection" ItemsSource="{Binding Path=Commands}" DisplayMemberPath="Name" SelectionMode="Extended"/>
-        <Label x:Name="LabelUserList_Copy" Content="Use Ctrl and double click in the lists above to display users info" HorizontalAlignment="Left" Margin="223,222,-1.6,0" VerticalAlignment="Top" Width="369" Height="27" Grid.ColumnSpan="2"/>
+        <Label x:Name="LabelUserList_Copy" Content="Use Ctrl and double click in the lists above to display user info" HorizontalAlignment="Left" Margin="221,289,0,0" VerticalAlignment="Top" Width="369" Height="27" Grid.ColumnSpan="2"/>
         <Label x:Name="LabelUserList_Copy1" Content="Admin List" HorizontalAlignment="Left" Margin="120,57,0,0" VerticalAlignment="Top" Width="84" FontWeight="Bold" Height="26" Grid.Column="1"/>
         <CheckBox x:Name="CheckBoxAdmin" Content="" HorizontalAlignment="Left" Margin="169,171,0,0" VerticalAlignment="Top" FontWeight="Bold" IsEnabled="False" ToolTip="Create user Into Admin List"/>
         <Button x:Name="ButtonChangeUser" Content="Change User" HorizontalAlignment="Left" Margin="36,195,0,0" VerticalAlignment="Top" Width="119" Height="24" FontWeight="Bold" IsEnabled="False" ToolTip="Change selected user" Click="ButtonChangeUser_Click" Cursor="Hand"/>
@@ -39,6 +39,7 @@
         <Button x:Name="ButtonMoveToAdmin" Content="---&gt;&gt;&gt;" HorizontalAlignment="Left" Margin="66.4,95,0,0" VerticalAlignment="Top" Width="50" IsEnabled="False" FontWeight="Bold" ToolTip="Move User to Admin List" Click="ButtonMoveToAdmin_Click" Grid.Column="1" Cursor="Hand"/>
         <Button x:Name="ButtonMoveToUser" Content="&lt;&lt;&lt; ---" HorizontalAlignment="Left" Margin="66.4,129,0,0" VerticalAlignment="Top" Width="50" FontWeight="Bold" IsEnabled="False" ToolTip="Move Admin user to User List" Click="ButtonMoveToUser_Click" Grid.Column="1" Cursor="Hand"/>
         <Label Content="Admin" HorizontalAlignment="Left" Margin="160,152,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="10"/>
+        <Label x:Name="LabelUserListInfo" Content="User info" HorizontalAlignment="Left" Margin="225,227,-3.6,0" VerticalAlignment="Top" Width="369" Height="27" Grid.ColumnSpan="2" FontWeight="Bold"/>
 
     </Grid>
 </Window>
