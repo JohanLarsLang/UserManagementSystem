@@ -281,7 +281,7 @@ namespace UserManagementSystem
         private int CheckName()
         {
             string haystackName = (string)TextBoxUserName.Text;
-            string patternName = @"\A[A-Ö]\w{1,}"
+            string patternName = @"\A[A-Ö]\w{1,}";
             var matchesName = Regex.Matches(haystackName, patternName);
             int nrMatchName = matchesName.Count;
             return nrMatchName;

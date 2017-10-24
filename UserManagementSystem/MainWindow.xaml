@@ -40,8 +40,8 @@
         <Button x:Name="ButtonMoveToUser" Content="&lt;&lt;&lt; ---" HorizontalAlignment="Left" Margin="66.4,119,0,0" VerticalAlignment="Top" Width="50" FontWeight="Bold" IsEnabled="False" ToolTip="Move Admin user to User List" Click="ButtonMoveToUser_Click" Grid.Column="1" Cursor="Hand"/>
         <Label Content="Admin" HorizontalAlignment="Left" Margin="160,142,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="10"/>
         <Label x:Name="LabelUserListInfo" Content="User info" HorizontalAlignment="Left" Margin="223,213,-1.6,0" VerticalAlignment="Top" Width="369" Height="27" Grid.ColumnSpan="2" FontWeight="Bold"/>
-        <Label Content="Admin" HorizontalAlignment="Left" Margin="229.4,226,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="10" Grid.Column="1"/>
-        <CheckBox x:Name="CheckBoxAdminUserInfo" Content="" HorizontalAlignment="Left" Margin="241.4,246,0,0" VerticalAlignment="Top" FontWeight="Bold" ToolTip="Create user Into Admin List" Grid.Column="1"/>
+        <Label Content="Admin" HorizontalAlignment="Left" Margin="234.4,226,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="10" Grid.Column="1"/>
+        <CheckBox x:Name="CheckBoxAdminUserInfo" Content="" HorizontalAlignment="Left" Margin="245.4,246,0,0" VerticalAlignment="Top" FontWeight="Bold" ToolTip="Create user Into Admin List" Grid.Column="1"/>
 
     </Grid>
 </Window>
