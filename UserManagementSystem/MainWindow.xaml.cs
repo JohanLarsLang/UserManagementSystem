@@ -281,7 +281,7 @@ namespace UserManagementSystem
         private int CheckName()
         {
             string haystackName = (string)TextBoxUserName.Text;
-            string patternName = @"\A[A-Ö]\w{1,}";
+            string patternName = @"\A([A-Z]|[ÅÄÖ])\w{1,}";
             var matchesName = Regex.Matches(haystackName, patternName);
             int nrMatchName = matchesName.Count;
             return nrMatchName;
@@ -292,7 +292,7 @@ namespace UserManagementSystem
         private int CheckEmail()
         {
             string haystackEmail = (string)TextBoxUserEmail.Text;
-            string patternEmail = @"\A[\w|\D]+[@][\w|\D]+[.][\w|\D]+";
+            string patternEmail = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
 
             var matchesEmail = Regex.Matches(haystackEmail, patternEmail);
             int nrMatchEmail = matchesEmail.Count;

@@ -23,7 +23,7 @@
         </Grid.ColumnDefinitions>
         <TextBox x:Name="TextBoxUserName" HorizontalAlignment="Left" Height="18" Margin="36,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="176" TextChanged="TextBoxUserName_TextChanged" ToolTip="Enter name"/>
         <TextBox x:Name="TextBoxUserEmail" HorizontalAlignment="Left" Height="19" Margin="36,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="176" TextChanged="TextBoxUserEmail_TextChanged" ToolTip="Enter valid emailaddress"/>
-        <Label x:Name="LabelUserName" Content="User name:" HorizontalAlignment="Left" Margin="36,50,0,0" VerticalAlignment="Top" Height="23" Width="75" FontWeight="Bold"/>
+        <Label x:Name="LabelUserName" Content="User name:" HorizontalAlignment="Left" Margin="36,48,0,0" VerticalAlignment="Top" Height="23" Width="75" FontWeight="Bold"/>
         <Label x:Name="LabelUserEmail" Content="User email:" HorizontalAlignment="Left" Margin="34,94,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <Button x:Name="ButtonUserCreate" Content="Create new User" HorizontalAlignment="Left" Margin="36,151,0,0" VerticalAlignment="Top" Width="119" IsEnabled="False" FontWeight="Bold" ToolTip="Create a new user" Click="ButtonUserCreate_Click" Height="25" Cursor="Hand"/>
         <ListBox x:Name="ListBoxUserList" HorizontalAlignment="Left" Height="145" Margin="227,70,0,0" VerticalAlignment="Top" Width="130" SelectionChanged="ListBoxUserList_SelectionChanged" ToolTip="Use Ctrl and Shift for multi selection" ItemsSource="{Binding Path=Commands}" DisplayMemberPath="Name" SelectionMode="Extended" Grid.ColumnSpan="2"/>
