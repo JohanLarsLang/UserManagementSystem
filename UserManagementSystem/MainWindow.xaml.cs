@@ -233,7 +233,7 @@ namespace UserManagementSystem
                 int nrMatchName = CheckName();
                 int nrMatchEmail = CheckEmail();
 
-                List<string> userNameEmailInUnserList = UserNameEmailList(ListBoxUserList);
+                List<string> userNameEmailInUserList = UserNameEmailList(ListBoxUserList);
                 List<string> userNameEmailInAdminList = UserNameEmailList(ListBoxAdminList);
 
 
@@ -252,7 +252,7 @@ namespace UserManagementSystem
 
 
                 }
-                else if (userNameEmailInUnserList.Contains(TextBoxUserEmail.Text) || userNameEmailInAdminList.Contains(TextBoxUserEmail.Text))
+                else if (userNameEmailInUserList.Contains(TextBoxUserEmail.Text) || userNameEmailInAdminList.Contains(TextBoxUserEmail.Text))
                     MessageBox.Show("This email already exists!");
 
                 else if (nrMatchName < 1)
@@ -275,7 +275,7 @@ namespace UserManagementSystem
                 int nrMatchName = CheckName();
                 int nrMatchEmail = CheckEmail();
 
-                List<string> userNameEmailInUnserList = UserNameEmailList(ListBoxUserList);
+                List<string> userNameEmailInUserList = UserNameEmailList(ListBoxUserList);
                 List<string> userNameEmailInAdminList = UserNameEmailList(ListBoxAdminList);
 
                 if (((User)ListBoxAdminList.SelectedItem).Name == TextBoxUserName.Text)
@@ -292,7 +292,7 @@ namespace UserManagementSystem
                     }
                 }
 
-                else if (userNameEmailInUnserList.Contains(TextBoxUserEmail.Text) || userNameEmailInAdminList.Contains(TextBoxUserEmail.Text))
+                else if (userNameEmailInUserList.Contains(TextBoxUserEmail.Text) || userNameEmailInAdminList.Contains(TextBoxUserEmail.Text))
                     MessageBox.Show("This email already exists!");
 
                 else if (nrMatchName < 1)
@@ -343,10 +343,10 @@ namespace UserManagementSystem
             int nrMatchName = CheckName();
             int nrMatchEmail = CheckEmail();
 
-            List<string> userNameEmailInUnserList = UserNameEmailList(ListBoxUserList);
+            List<string> userNameEmailInUserList = UserNameEmailList(ListBoxUserList);
             List<string> userNameEmailInAdminList = UserNameEmailList(ListBoxAdminList);
 
-            if (userNameEmailInUnserList.Contains(TextBoxUserEmail.Text) || userNameEmailInAdminList.Contains(TextBoxUserEmail.Text))
+            if (userNameEmailInUserList.Contains(TextBoxUserEmail.Text) || userNameEmailInAdminList.Contains(TextBoxUserEmail.Text))
             {
                 MessageBox.Show("This email already exists!");
                 CheckBoxAdmin.IsChecked = false;
