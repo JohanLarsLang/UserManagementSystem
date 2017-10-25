@@ -73,6 +73,17 @@ namespace UserManagementSystem
 
         private void ListBoxUserList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (ListBoxUserList.Items.Count >= 2)
+            {
+                ButtonUserListSortAscending.IsEnabled = true;
+                ButtonUserListSortDescending.IsEnabled = true;
+            }
+
+            else
+            {
+                ButtonUserListSortAscending.IsEnabled = false;
+                ButtonUserListSortDescending.IsEnabled = false;
+            }
 
             if ((User)ListBoxUserList.SelectedItem != null)
             {
@@ -132,6 +143,18 @@ namespace UserManagementSystem
 
         private void ListBoxAdminList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (ListBoxAdminList.Items.Count >= 2)
+            {
+                ButtonAdminListSortAscending.IsEnabled = true;
+                ButtonAdminListSortDescending.IsEnabled = true;
+            }
+
+            else
+            {
+                ButtonAdminListSortAscending.IsEnabled = false;
+                ButtonAdminListSortDescending.IsEnabled = false;
+            }
+
             if ((User)ListBoxAdminList.SelectedItem != null)
             {
                 LabelUserInfo.Content = "Name: " + ((User)ListBoxAdminList.SelectedItem).Name + "\n" + "Email: " +
@@ -169,6 +192,13 @@ namespace UserManagementSystem
                     ListBoxUserList.Items.Remove(item);
                 }
             }
+
+            if (ListBoxAdminList.Items.Count >= 2)
+            {
+                SortListBoxAscending(ListBoxAdminList);
+                ButtonAdminListSortAscending.IsEnabled = false;
+                ButtonAdminListSortDescending.IsEnabled = true;
+            }
         }
 
         private void ButtonMoveToUser_Click(object sender, RoutedEventArgs e)
@@ -184,6 +214,14 @@ namespace UserManagementSystem
                     ListBoxAdminList.Items.Remove(item);
                 }
             }
+
+            if (ListBoxUserList.Items.Count >= 2)
+            {
+                SortListBoxAscending(ListBoxUserList);
+                ButtonUserListSortAscending.IsEnabled = false;
+                ButtonUserListSortDescending.IsEnabled = true;
+            }
+
             CheckBoxAdminUserInfo.IsChecked = false;
         }
 
@@ -195,8 +233,8 @@ namespace UserManagementSystem
                 int nrMatchName = CheckName();
                 int nrMatchEmail = CheckEmail();
 
-                List<string> userNamneEmailInUnserList = UserNameEmailList(ListBoxUserList);
-                List<string> userNamneEmailInAdminList = UserNameEmailList(ListBoxAdminList);
+                List<string> userNameEmailInUnserList = UserNameEmailList(ListBoxUserList);
+                List<string> userNameEmailInAdminList = UserNameEmailList(ListBoxAdminList);
 
 
                 if (((User)ListBoxUserList.SelectedItem).Name == TextBoxUserName.Text)
@@ -214,7 +252,7 @@ namespace UserManagementSystem
 
 
                 }
-                else if (userNamneEmailInUnserList.Contains(TextBoxUserEmail.Text) || userNamneEmailInAdminList.Contains(TextBoxUserEmail.Text))
+                else if (userNameEmailInUnserList.Contains(TextBoxUserEmail.Text) || userNameEmailInAdminList.Contains(TextBoxUserEmail.Text))
                     MessageBox.Show("This email already exists!");
 
                 else if (nrMatchName < 1)
@@ -311,8 +349,6 @@ namespace UserManagementSystem
             if (userNameEmailInUnserList.Contains(TextBoxUserEmail.Text) || userNameEmailInAdminList.Contains(TextBoxUserEmail.Text))
             {
                 MessageBox.Show("This email already exists!");
-                TextBoxUserName.Text = "";
-                TextBoxUserEmail.Text = "";
                 CheckBoxAdmin.IsChecked = false;
             }
 
@@ -328,11 +364,28 @@ namespace UserManagementSystem
                 User user = new User(TextBoxUserName.Text, TextBoxUserEmail.Text);
 
                 if (CheckBoxAdmin.IsChecked == false)
+                {
                     ListBoxUserList.Items.Add(new User(TextBoxUserName.Text, TextBoxUserEmail.Text));
-                //, ListSortDirection.Ascending);
+
+                    if (ListBoxUserList.Items.Count >= 2)
+                    {
+                        SortListBoxAscending(ListBoxUserList);
+                        ButtonUserListSortAscending.IsEnabled = false;
+                        ButtonUserListSortDescending.IsEnabled = true;
+                    }
+                }
 
                 else
+                {
                     ListBoxAdminList.Items.Add(new User(TextBoxUserName.Text, TextBoxUserEmail.Text));
+
+                    if (ListBoxAdminList.Items.Count >= 2)
+                    {
+                        SortListBoxAscending(ListBoxAdminList);
+                        ButtonAdminListSortAscending.IsEnabled = false;
+                        ButtonAdminListSortDescending.IsEnabled = true;
+                    }
+                }
 
                 TextBoxUserName.Text = "";
                 TextBoxUserEmail.Text = "";
@@ -351,7 +404,67 @@ namespace UserManagementSystem
 
             return objectName;
         }
-                     
+
+
+        private void SortListBoxAscending(ListBox lb)
+        {
+            List<User> users = new List<User>();
+            for (int i = 0; i < lb.Items.Count; i++)
+                users.Add(new User(((User)lb.Items.GetItemAt(i)).Name, ((User)lb.Items.GetItemAt(i)).Email));
+
+            for (int i = lb.Items.Count - 1; i >= 0; i--)
+                lb.Items.RemoveAt(i);
+
+            var querySort = from user in users
+                            orderby user.Name ascending
+                            select user;
+
+            foreach (var x in querySort)
+                lb.Items.Add(x);
+        }
+
+        private void SortListBoxDescending(ListBox lb)
+        {
+            List<User> users = new List<User>();
+            for (int i = 0; i < lb.Items.Count; i++)
+                users.Add(new User(((User)lb.Items.GetItemAt(i)).Name, ((User)lb.Items.GetItemAt(i)).Email));
+
+            for (int i = lb.Items.Count - 1; i >= 0; i--)
+                lb.Items.RemoveAt(i);
+
+            var querySort = from user in users
+                            orderby user.Name descending
+                            select user;
+
+            foreach (var x in querySort)
+                lb.Items.Add(x);
+        }
+
+
+
+        private void ButtonUserListSortAscending_Click(object sender, RoutedEventArgs e)
+        {
+            SortListBoxAscending(ListBoxUserList);
+            ButtonUserListSortDescending.IsEnabled = true;
+        }
+
+        private void ButtonUserListSortDescending_Click(object sender, RoutedEventArgs e)
+        {
+            SortListBoxDescending(ListBoxUserList);
+            ButtonUserListSortAscending.IsEnabled = true;
+        }
+
+        private void ButtonAdminListSortAscending_Click(object sender, RoutedEventArgs e)
+        {
+            SortListBoxAscending(ListBoxAdminList);
+            ButtonAdminListSortDescending.IsEnabled = true;
+        }
+
+        private void ButtonAdminListSortDescending_Click(object sender, RoutedEventArgs e)
+        {
+            SortListBoxDescending(ListBoxAdminList);
+            ButtonAdminListSortAscending.IsEnabled = true;
+        }
     }
 }
 
