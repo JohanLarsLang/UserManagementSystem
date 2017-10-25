@@ -446,24 +446,73 @@ namespace UserManagementSystem
         {
             SortListBoxAscending(ListBoxUserList);
             ButtonUserListSortDescending.IsEnabled = true;
+            ButtonUserListSortAscending.IsEnabled = false;
         }
 
         private void ButtonUserListSortDescending_Click(object sender, RoutedEventArgs e)
         {
             SortListBoxDescending(ListBoxUserList);
             ButtonUserListSortAscending.IsEnabled = true;
+            ButtonUserListSortDescending.IsEnabled = false;
         }
 
         private void ButtonAdminListSortAscending_Click(object sender, RoutedEventArgs e)
         {
             SortListBoxAscending(ListBoxAdminList);
             ButtonAdminListSortDescending.IsEnabled = true;
+            ButtonAdminListSortAscending.IsEnabled = false;
         }
 
         private void ButtonAdminListSortDescending_Click(object sender, RoutedEventArgs e)
         {
             SortListBoxDescending(ListBoxAdminList);
             ButtonAdminListSortAscending.IsEnabled = true;
+            ButtonAdminListSortDescending.IsEnabled = false;
+        }
+
+
+        private void ListBoxUserList_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var item = ItemsControl.ContainerFromElement(ListBoxUserList, e.OriginalSource as DependencyObject) as ListBoxItem;
+            if (item != null)
+            {
+                if ((User)ListBoxUserList.SelectedItem != null)
+                {
+                    LabelUserInfo.Content = "Name: " + ((User)ListBoxUserList.SelectedItem).Name + "\n" + "Email: " +
+                                            ((User)ListBoxUserList.SelectedItem).Email;
+
+                    TextBoxUserName.Text = ((User)ListBoxUserList.SelectedItem).Name;
+                    TextBoxUserEmail.Text = ((User)ListBoxUserList.SelectedItem).Email;
+
+                    ButtonMoveToAdmin.IsEnabled = true;
+                    ButtonMoveToUser.IsEnabled = false;
+                    CheckBoxAdminUserInfo.IsChecked = false;
+                }
+                else
+                    LabelUserInfo.Content = string.Empty;
+            }
+        }
+
+        private void ListBoxAdminList_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var item = ItemsControl.ContainerFromElement(ListBoxAdminList, e.OriginalSource as DependencyObject) as ListBoxItem;
+            if (item != null)
+            {
+                if ((User)ListBoxAdminList.SelectedItem != null)
+                {
+                    LabelUserInfo.Content = "Name: " + ((User)ListBoxAdminList.SelectedItem).Name + "\n" + "Email: " +
+                                            ((User)ListBoxAdminList.SelectedItem).Email;
+
+                    TextBoxUserName.Text = ((User)ListBoxAdminList.SelectedItem).Name;
+                    TextBoxUserEmail.Text = ((User)ListBoxAdminList.SelectedItem).Email;
+
+                    ButtonMoveToAdmin.IsEnabled = false;
+                    ButtonMoveToUser.IsEnabled = true;
+                    CheckBoxAdminUserInfo.IsChecked = true;
+                }
+                else
+                    LabelUserInfo.Content = string.Empty;
+            }
         }
     }
 }
