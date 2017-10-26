@@ -85,21 +85,6 @@ namespace UserManagementSystem
                 ButtonUserListSortDescending.IsEnabled = false;
             }
 
-            if ((User)ListBoxUserList.SelectedItem != null)
-            {
-                LabelUserInfo.Content = "Name: " + ((User)ListBoxUserList.SelectedItem).Name + "\n" + "Email: " +
-                                        ((User)ListBoxUserList.SelectedItem).Email;
-
-                TextBoxUserName.Text = ((User)ListBoxUserList.SelectedItem).Name;
-                TextBoxUserEmail.Text = ((User)ListBoxUserList.SelectedItem).Email;
-                ButtonMoveToAdmin.IsEnabled = true;
-                ButtonMoveToUser.IsEnabled = false;
-                CheckBoxAdminUserInfo.IsChecked = false;
-            }
-
-            else
-                LabelUserInfo.Content = string.Empty;
-
             if ((User)ListBoxUserList.SelectedItem != null || (User)ListBoxAdminList.SelectedItem != null)
             {
                 ButtonChangeUser.IsEnabled = true;
@@ -112,6 +97,7 @@ namespace UserManagementSystem
             MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Are you sure?", "Confirm delete", System.Windows.MessageBoxButton.YesNo);
 
             if (messageBoxResult == MessageBoxResult.Yes)
+            {
 
                 for (int i = ListBoxUserList.Items.Count - 1; i >= 0; i--)
                 {
@@ -125,15 +111,22 @@ namespace UserManagementSystem
                     }
                 }
 
-            for (int i = ListBoxAdminList.Items.Count - 1; i >= 0; i--)
-            {
-                object[] itemsToRemove = new object[ListBoxAdminList.SelectedItems.Count];
-                ListBoxAdminList.SelectedItems.CopyTo(itemsToRemove, 0);
-
-                foreach (object item in itemsToRemove)
+                for (int i = ListBoxAdminList.Items.Count - 1; i >= 0; i--)
                 {
-                    ListBoxAdminList.Items.Remove(item);
+                    object[] itemsToRemove = new object[ListBoxAdminList.SelectedItems.Count];
+                    ListBoxAdminList.SelectedItems.CopyTo(itemsToRemove, 0);
+
+                    foreach (object item in itemsToRemove)
+                    {
+                        ListBoxAdminList.Items.Remove(item);
+                    }
                 }
+            }
+
+            if ((User)ListBoxUserList.SelectedItem == null && ((User)ListBoxAdminList.SelectedItem == null))
+            {
+                ButtonMoveToAdmin.IsEnabled = false;
+                ButtonMoveToUser.IsEnabled = false;
             }
 
             TextBoxUserName.Text = "";
@@ -154,21 +147,6 @@ namespace UserManagementSystem
                 ButtonAdminListSortAscending.IsEnabled = false;
                 ButtonAdminListSortDescending.IsEnabled = false;
             }
-
-            if ((User)ListBoxAdminList.SelectedItem != null)
-            {
-                LabelUserInfo.Content = "Name: " + ((User)ListBoxAdminList.SelectedItem).Name + "\n" + "Email: " +
-                                        ((User)ListBoxAdminList.SelectedItem).Email;
-
-                TextBoxUserName.Text = ((User)ListBoxAdminList.SelectedItem).Name;
-                TextBoxUserEmail.Text = ((User)ListBoxAdminList.SelectedItem).Email;
-
-                ButtonMoveToAdmin.IsEnabled = false;
-                ButtonMoveToUser.IsEnabled = true;
-                CheckBoxAdminUserInfo.IsChecked = true;
-            }
-            else
-                LabelUserInfo.Content = string.Empty;
 
             if ((User)ListBoxUserList.SelectedItem != null || (User)ListBoxAdminList.SelectedItem != null)
             {
@@ -222,7 +200,6 @@ namespace UserManagementSystem
                 ButtonUserListSortDescending.IsEnabled = true;
             }
 
-            CheckBoxAdminUserInfo.IsChecked = false;
         }
 
         private void ButtonChangeUser_Click(object sender, RoutedEventArgs e)
@@ -248,6 +225,7 @@ namespace UserManagementSystem
                         ListBoxUserList.Items.Remove((User)ListBoxUserList.SelectedItem);
                         User user = new User(TextBoxUserName.Text, TextBoxUserEmail.Text);
                         ListBoxUserList.Items.Add(new User(TextBoxUserName.Text, TextBoxUserEmail.Text));
+
                     }
 
 
@@ -289,6 +267,7 @@ namespace UserManagementSystem
                         ListBoxAdminList.Items.Remove((User)ListBoxAdminList.SelectedItem);
                         User user = new User(TextBoxUserName.Text, TextBoxUserEmail.Text);
                         ListBoxAdminList.Items.Add(new User(TextBoxUserName.Text, TextBoxUserEmail.Text));
+
                     }
                 }
 
@@ -486,7 +465,7 @@ namespace UserManagementSystem
 
                     ButtonMoveToAdmin.IsEnabled = true;
                     ButtonMoveToUser.IsEnabled = false;
-                    CheckBoxAdminUserInfo.IsChecked = false;
+
                 }
                 else
                     LabelUserInfo.Content = string.Empty;
@@ -508,7 +487,6 @@ namespace UserManagementSystem
 
                     ButtonMoveToAdmin.IsEnabled = false;
                     ButtonMoveToUser.IsEnabled = true;
-                    CheckBoxAdminUserInfo.IsChecked = true;
                 }
                 else
                     LabelUserInfo.Content = string.Empty;
